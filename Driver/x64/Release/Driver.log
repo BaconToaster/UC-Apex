@@ -1,0 +1,19 @@
+﻿  Building 'Driver' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping x64\Release\Driver.inf
+  Stamping [Version] section with DriverVer=03/18/2021,15.24.0.604
+  hook.c
+  main.c
+  Generating Code...
+  Driver.vcxproj -> C:\Users\Leo\source\repos\UC-Apex\x64\Release\Driver.sys
+  Driver is 'Universal'.
+  ........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  C:\Users\Leo\source\repos\UC-Apex\x64\Release\Driver\driver.cat
