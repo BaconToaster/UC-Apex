@@ -327,6 +327,10 @@ int main()
 	std::cout << "connected to driver" << std::endl;
 
 	std::cout << "success" << std::endl;
+	
+	Sleep(2000);
+	
+	FreeConsole();
 
 	entList = moduleBase + OFFSET_ENTITYLIST;
 
