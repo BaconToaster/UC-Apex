@@ -1,3 +1,8 @@
+/*
+Credits to TheCruZ (https://github.com/TheCruZ/) and iraizo (https://github.com/iraizo/)
+*/
+
+
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <iostream>
@@ -13,10 +18,10 @@
 #include <d3dx9.h>
 #pragma comment(lib, "d3dx9.lib")
 
-#define OFFSET_ENTITYLIST		    0x18DA338
-#define OFFSET_LOCAL_ENT			0x1C898F8
-#define OFFSET_MATRIX				0x001B3BD0
-#define OFFSET_RENDER				0x408B768
+#define OFFSET_ENTITYLIST		    0x18DB438
+#define OFFSET_LOCAL_ENT			0x1C8AA98
+#define OFFSET_MATRIX				0x1B3BD0
+#define OFFSET_RENDER				0x408C968
 
 #define OFFSET_TEAM					0x0450
 #define OFFSET_HEALTH				0x0440
@@ -109,12 +114,12 @@ void DrawFilledRectangle(int x, int y, int w, int h, D3DCOLOR color)
 	p_Device->Clear(1, &rect, D3DCLEAR_TARGET, color, 0, 0);
 }
 
-void DrawBorderBox(int x, int y, int x2, int y2, int thickness, D3DCOLOR color)
+void DrawBorderBox(int x, int y, int w, int h, D3DCOLOR color)
 {
-	DrawFilledRectangle(x - 1, y - 1, x2 + 2, 1, color);
-	DrawFilledRectangle(x - 1, y, 1, y2 - 1, color);
-	DrawFilledRectangle(x + x2, y, 1, y2 - 1, color);
-	DrawFilledRectangle(x - 1, y + y2 - 1, x2 + 2, 1, color);
+	DrawFilledRectangle(x - 1, y - 1, w + 2, 1, color);
+	DrawFilledRectangle(x - 1, y, 1, h - 1, color);
+	DrawFilledRectangle(x + w, y, 1, h - 1, color);
+	DrawFilledRectangle(x - 1, y + h - 1, w + 2, 1, color);
 }
 
 bool WorldToScreen(vec3 from, float* m_vMatrix, int targetWidth, int targetHeight, vec3& to)
@@ -242,7 +247,6 @@ void Render()
 				int teamID = Driver.rpm<int>(pID, player + OFFSET_TEAM);
 
 				if (health < 0 || health > 100 || teamID < 0 || teamID > 32) continue;
-				//if (teamID == Driver.rpm<int>(pID, localPlayer + OFFSET_TEAM)) continue;
 
 				vec3 targetHead = GetBonePos(player, 8);
 				vec3 targetHeadScreen;
@@ -261,7 +265,7 @@ void Render()
 						if (teamID == Driver.rpm<int>(pID, localPlayer + OFFSET_TEAM))
 							color = D3DCOLOR_ARGB(255, 0, 100, 255);
 
-						DrawBorderBox(middle, targetHeadScreen.y, width, height, 3, color);
+						DrawBorderBox(middle, targetHeadScreen.y, width, height, color);
 					}
 				}
 			}
@@ -309,10 +313,18 @@ int main()
 	std::cout << "connected to driver" << std::endl;
 
 	if (!InitWindow())
+	{
+		std::cout << "failed to hijack the nvidia overlay" << std::endl;
+		system("pause");
 		return 0;
+	}
 
 	if (!DirectXInit())
+	{
+		std::cout << "failed to initialize directx on the nvidia overlay" << std::endl;
+		system("pause");
 		return 0;
+	}
 
 	std::cout << "success" << std::endl;
 

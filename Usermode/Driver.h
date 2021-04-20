@@ -24,18 +24,19 @@ class KernelDriver
 {
 private:
 	uintptr_t currentPID;
+	void* hookedFunc;
 
 public:
 	template<typename ... arg>
 	uint64_t CallHook(const arg ... args)
 	{
-		void* hookedFunc = GetProcAddress(LoadLibrary(L"win32u.dll"), "NtOpenCompositionSurfaceSectionInfo");
 		auto func = static_cast<uint64_t(_stdcall*)(arg...)>(hookedFunc);
 		return func(args ...);
 	}
 
 	uintptr_t GetModuleBase(uintptr_t pID, const wchar_t* modName)
 	{
+		hookedFunc = GetProcAddress(LoadLibrary(L"win32u.dll"), "NtOpenCompositionSurfaceSectionInfo");
 		currentPID = GetCurrentProcessId();
 		KREQ modRequest;
 		modRequest.inst = INST_GETBASE;

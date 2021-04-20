@@ -46,7 +46,7 @@ PVOID get_system_module_base(LPCSTR module_name)
 	if (!bytes)
 		return NULL;
 
-	PRTL_PROCESS_MODULES modules = (PRTL_PROCESS_MODULES)ExAllocatePoolWithTag(NonPagedPool, bytes, 'kek');
+	PRTL_PROCESS_MODULES modules = (PRTL_PROCESS_MODULES)ExAllocatePool(NonPagedPool, bytes);
 
 	status = ZwQuerySystemInformation(SystemModuleInformation, modules, bytes, &bytes);
 
@@ -69,7 +69,7 @@ PVOID get_system_module_base(LPCSTR module_name)
 	}
 
 	if (modules)
-		ExFreePoolWithTag(modules, 0);
+		ExFreePool(modules);
 
 	if (module_base <= NULL)
 		return NULL;
