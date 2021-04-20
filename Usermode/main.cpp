@@ -290,6 +290,20 @@ void DirectXShutdown()
 
 int main()
 {
+	if (!InitWindow())
+	{
+		std::cout << "failed to hijack the nvidia overlay" << std::endl;
+		system("pause");
+		return 0;
+	}
+
+	if (!DirectXInit())
+	{
+		std::cout << "failed to initialize directx on the nvidia overlay" << std::endl;
+		system("pause");
+		return 0;
+	}
+	
 	while (hWnd == 0)
 	{
 		hWnd = FindWindow(NULL, L"Apex Legends");
@@ -311,20 +325,6 @@ int main()
 	}
 
 	std::cout << "connected to driver" << std::endl;
-
-	if (!InitWindow())
-	{
-		std::cout << "failed to hijack the nvidia overlay" << std::endl;
-		system("pause");
-		return 0;
-	}
-
-	if (!DirectXInit())
-	{
-		std::cout << "failed to initialize directx on the nvidia overlay" << std::endl;
-		system("pause");
-		return 0;
-	}
 
 	std::cout << "success" << std::endl;
 
